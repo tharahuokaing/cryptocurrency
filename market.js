@@ -1,5 +1,5 @@
 /* =========================================================
-   HUOKAING THARA TRADING SYSTEM - 30 ASSETS MARKET CONTROLLER
+   HUOKAING THARA TRADING SYSTEM - MARKET CONTROLLER
 ========================================================= */
 
 (() => {
@@ -76,20 +76,32 @@
     }
 
     /**
-     * Handle Binance-style Buy/Sell button triggers
+     * Handle Binance-style Buy (Modal) and Sell (Redirect) triggers
      */
     function attachTradeListeners() {
-        const buttons = document.querySelectorAll(".btn-buy, .btn-sell");
-        buttons.forEach(btn => {
+        // Buy button listener (keeps modal action)
+        const buyButtons = document.querySelectorAll(".btn-buy");
+        buyButtons.forEach(btn => {
             btn.addEventListener("click", (e) => {
                 const coinName = e.target.getAttribute("data-coin");
-                const actionType = e.target.getAttribute("data-action");
 
                 if (modalTitle && modalDesc && tradeModal) {
-                    modalTitle.textContent = `${actionType} Order: ${coinName}`;
-                    modalDesc.textContent = `Successfully placed simulated limit order for ${coinName} on the live order book node.`;
+                    modalTitle.textContent = `Buy Order: ${coinName}`;
+                    modalDesc.textContent = `Successfully placed simulated limit buy order for ${coinName} on the live order book node.`;
                     tradeModal.style.display = "flex";
                 }
+            });
+        });
+
+        // Sell button listener (redirects directly to your withdrawal portal with query params)
+        const sellButtons = document.querySelectorAll(".btn-sell");
+        sellButtons.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const coinName = e.target.getAttribute("data-coin");
+                console.log(`[TRADE ROUTER] Initiating sell order redirect for ${coinName}...`);
+                
+                // Immediate redirect to withdrawal URL carrying the asset payload
+                window.location.href = `https://tharahuokaing.github.io/withdrawal/?asset=${encodeURIComponent(coinName)}&action=sell`;
             });
         });
     }
