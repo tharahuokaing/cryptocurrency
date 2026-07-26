@@ -1,13 +1,13 @@
 /* =========================================================
-   HUOKAING THARA TRADING SYSTEM - LIVE MARKET CONTROLLER
+   HUOKAING THARA TRADING SYSTEM - 30 ASSETS MARKET CONTROLLER
 ========================================================= */
 
 (() => {
     "use strict";
 
-    // Track 10 Assets: Bitcoin, Ethereum, eCash + 7 more (Ripple, Cardano, Solana, Dogecoin, Avalanche, Chainlink, Polkadot)
-    const cryptoIds = "bitcoin,ethereum,ecash,ripple,cardano,solana,dogecoin,avalanche-2,chainlink,polkadot";
-    const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${cryptoIds}&order=market_cap_desc&per_page=10&page=1&sparkline=false`;
+    // Tracking 30 Cryptocurrencies (Top 30 Market Capitalization Assets)
+    const cryptoIds = "bitcoin,ethereum,binancecoin,ripple,solana,cardano,dogecoin,avalanche-2,chainlink,polkadot,polygon,shiba-inu,uniswap,litecoin,cosmos,stellar,monero,bitcoin-cash,near,aptos,filecoin,arbitrum,render,optimism,vechain,hedera,sui,cosmos,thorchain,injective";
+    const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${cryptoIds}&order=market_cap_desc&per_page=30&page=1&sparkline=false`;
 
     const tableBody = document.getElementById("cryptoTableBody");
     const totalVolumeEl = document.getElementById("totalVolume");
@@ -17,7 +17,7 @@
     const closeModalBtn = document.getElementById("closeModalBtn");
 
     /**
-     * Fetch live market data from public API
+     * Fetch live market data for 30 assets from public API
      */
     async function fetchCryptoMarkets() {
         try {
@@ -32,7 +32,7 @@
     }
 
     /**
-     * Render assets into the Binance-style table
+     * Render 30 assets into the Binance-style table
      */
     function renderMarketTable(coins) {
         if (!tableBody) return;
@@ -72,7 +72,6 @@
             totalVolumeEl.textContent = `$${cumulativeVolume.toLocaleString()}`;
         }
 
-        // Attach event listeners to newly rendered buttons
         attachTradeListeners();
     }
 
@@ -95,14 +94,12 @@
         });
     }
 
-    // Close modal event
     if (closeModalBtn && tradeModal) {
         closeModalBtn.addEventListener("click", () => {
             tradeModal.style.display = "none";
         });
     }
 
-    // Initialize and poll live prices every 15 seconds
     document.addEventListener("DOMContentLoaded", () => {
         fetchCryptoMarkets();
         setInterval(fetchCryptoMarkets, 15000);
