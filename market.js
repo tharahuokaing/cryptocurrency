@@ -1,5 +1,5 @@
 /* =========================================================
-   HUOKAING THARA TRADING SYSTEM - MARKET CONTROLLER
+   HUOKAING THARA TRADING SYSTEM - REDIRECT MARKET CONTROLLER
 ========================================================= */
 
 (() => {
@@ -11,10 +11,6 @@
 
     const tableBody = document.getElementById("cryptoTableBody");
     const totalVolumeEl = document.getElementById("totalVolume");
-    const tradeModal = document.getElementById("tradeModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDesc = document.getElementById("modalDesc");
-    const closeModalBtn = document.getElementById("closeModalBtn");
 
     /**
      * Fetch live market data for 30 assets from public API
@@ -60,8 +56,8 @@
                 <td>$${coin.total_volume.toLocaleString()}</td>
                 <td>
                     <div class="btn-trade-group">
-                        <button class="btn-buy" data-coin="${coin.name}" data-action="Buy">Buy</button>
-                        <button class="btn-sell" data-coin="${coin.name}" data-action="Sell">Sell</button>
+                        <button class="btn-buy" data-coin="${coin.symbol.toUpperCase()}" data-action="buy">Buy</button>
+                        <button class="btn-sell" data-coin="${coin.symbol.toUpperCase()}" data-action="sell">Sell</button>
                     </div>
                 </td>
             `;
@@ -76,42 +72,27 @@
     }
 
     /**
-     * Handle Binance-style Buy (Modal) and Sell (Redirect) triggers
+     * Handle Buy/Sell button redirects to banking modules
      */
     function attachTradeListeners() {
-        // Buy button listener (keeps modal action)
-        const buyButtons = document.querySelectorAll(".btn-buy");
-        buyButtons.forEach(btn => {
+        const buttons = document.querySelectorAll(".btn-buy, .btn-sell");
+        buttons.forEach(btn => {
             btn.addEventListener("click", (e) => {
-                const coinName = e.target.getAttribute("data-coin");
+                const coinSymbol = e.target.getAttribute("data-coin");
+                const actionType = e.target.getAttribute("data-action");
 
-                if (modalTitle && modalDesc && tradeModal) {
-                    modalTitle.textContent = `Buy Order: ${coinName}`;
-                    modalDesc.textContent = `Successfully placed simulated limit buy order for ${coinName} on the live order book node.`;
-                    tradeModal.style.display = "flex";
+                if (actionType === "buy") {
+                    // Redirect to deposit page with asset symbol parameter
+                    window.location.href = `https://tharahuokaing.github.io/deposit/?asset=${coinSymbol}`;
+                } else if (actionType === "sell") {
+                    // Redirect to withdrawal page with asset symbol parameter
+                    window.location.href = `https://tharahuokaing.github.io/withdrawal/?asset=${coinSymbol}`;
                 }
             });
         });
-
-        // Sell button listener (redirects directly to your withdrawal portal with query params)
-        const sellButtons = document.querySelectorAll(".btn-sell");
-        sellButtons.forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                const coinName = e.target.getAttribute("data-coin");
-                console.log(`[TRADE ROUTER] Initiating sell order redirect for ${coinName}...`);
-                
-                // Immediate redirect to withdrawal URL carrying the asset payload
-                window.location.href = `https://tharahuokaing.github.io/withdrawal/?asset=${encodeURIComponent(coinName)}&action=sell`;
-            });
-        });
     }
 
-    if (closeModalBtn && tradeModal) {
-        closeModalBtn.addEventListener("click", () => {
-            tradeModal.style.display = "none";
-        });
-    }
-
+    // Initialize and poll live prices every 15 seconds
     document.addEventListener("DOMContentLoaded", () => {
         fetchCryptoMarkets();
         setInterval(fetchCryptoMarkets, 15000);
