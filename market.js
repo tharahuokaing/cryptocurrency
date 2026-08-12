@@ -5,12 +5,12 @@
 (() => {
     "use strict";
 
-    // Tracking 30 Cryptocurrencies (Top 30 Market Capitalization Assets)
+    // Tracking 31 Cryptocurrencies (Top 31 Market Capitalization Assets)
     const cryptoIds =
         "bitcoin,ethereum,binancecoin,ripple,solana,cardano,dogecoin,avalanche-2,chainlink,polkadot,polygon,shiba-inu,uniswap,litecoin,cosmos,stellar,monero,bitcoin-cash,near,aptos,filecoin,arbitrum,render,optimism,vechain,hedera,sui,cosmos,thorchain,injective";
 
     const apiUrl =
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${cryptoIds}&order=market_cap_desc&per_page=30&page=1&sparkline=false`;
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${cryptoIds}&order=market_cap_desc&per_page=31&page=1&sparkline=false`;
 
     const tableBody = document.getElementById("cryptoTableBody");
     const totalVolumeEl = document.getElementById("totalVolume");
@@ -33,7 +33,7 @@
     };
 
     /**
-     * Fetch live market data for 30 assets from public API
+     * Fetch live market data for 31 assets from public API
      */
     async function fetchCryptoMarkets() {
         try {
