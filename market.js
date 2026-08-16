@@ -23,9 +23,9 @@
         id: "t-coin",
         name: "T-Coin",
         symbol: "tcoin",
-        current_price: 63,079.00,
-        price_change_percentage_24h: 0.11,
-        total_volume: 8565044715,
+        current_price: 0,
+        price_change_percentage_24h: 0,
+        total_volume: 0,
 
         // Simple built-in logo so no external image is required
         image:
